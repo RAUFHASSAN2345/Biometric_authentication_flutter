@@ -17,7 +17,6 @@ class home_view extends StatefulWidget {
 }
 
 class _home_viewState extends State<home_view> {
-  bool isDeviceSupport = false;
   List<BiometricType>? availableBiometrics;
   LocalAuthentication? auth;
   @override
@@ -50,101 +49,45 @@ class _home_viewState extends State<home_view> {
       ),
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // ElevatedButton(
-              //     onPressed: () async {
-              //       try {
-              //         availableBiometrics =
-              //             await auth?.getAvailableBiometrics();
-              //         print('available_biometrics : $availableBiometrics');
-
-              //         if (availableBiometrics!.contains(BiometricType.weak) ||
-              //             availableBiometrics!.contains(BiometricType.face)) {
-              //           final bool didAuthenticate = await auth!.authenticate(
-              //             localizedReason: 'Unlock your screen with faceid',
-              //             options: AuthenticationOptions(
-              //                 biometricOnly: true,
-              //                 useErrorDialogs: false,
-              //                 stickyAuth: true),
-              //           );
-              //           if (didAuthenticate == true) {
-              //             Navigator.pushReplacement(
-              //                 context,
-              //                 MaterialPageRoute(
-              //                   builder: (context) => auth_successfull_view(),
-              //                 ));
-              //           }
-              //         }
-              //       } on PlatformException catch (e) {
-              //         // availableBiometrics = <BiometricType>[];
-              //         if (e.code == error_code.passcodeNotSet) {
-              //           exit(0);
-              //         }
-              //         print("$e");
-              //         return showDialog(
-              //           context: context,
-              //           builder: (context) {
-              //             return AlertDialog(
-              //               content: Text('$e'),
-              //             );
-              //           },
-              //         );
-              //       }
-              //     },
-              //     child: Text('faceid')),
-              ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      availableBiometrics =
-                          await auth?.getAvailableBiometrics();
-                      print('available_biometrics : $availableBiometrics');
-                      if (availableBiometrics!.contains(BiometricType.strong) ||
-                          availableBiometrics!
-                              .contains(BiometricType.fingerprint)) {
-                        final bool didAuthenticate = await auth!.authenticate(
-                            localizedReason:
-                                'Unlock your screen with fingerprint',
-                            options: AuthenticationOptions(
-                                stickyAuth: true,
-                                useErrorDialogs: false,
-                                biometricOnly: true),
-                            authMessages: const <AuthMessages>[
-                              AndroidAuthMessages(
-                                cancelButton: 'No thanks',
-                              ),
-                              IOSAuthMessages(
-                                cancelButton: 'No thanks',
-                              ),
-                            ]);
-                        if (didAuthenticate == true) {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => auth_successfull_view(),
-                              ));
-                        }
-                      }
-                    } on PlatformException catch (e) {
-                      // availableBiometrics = <BiometricType>[];
-                      if (e.code == error_code.passcodeNotSet) {
-                        exit(0);
-                      }
-                      print("$e");
-                      return showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: Text('$e'),
-                          );
-                        },
-                      );
+          child: ElevatedButton(
+              onPressed: () async {
+                try {
+                  availableBiometrics = await auth?.getAvailableBiometrics();
+                  print('available_biometrics : $availableBiometrics');
+                  if (availableBiometrics!.contains(BiometricType.strong) ||
+                      availableBiometrics!
+                          .contains(BiometricType.fingerprint)) {
+                    final bool didAuthenticate = await auth!.authenticate(
+                        localizedReason: 'Unlock your screen with fingerprint',
+                        options: AuthenticationOptions(
+                            stickyAuth: true, biometricOnly: true),
+                        authMessages: const <AuthMessages>[
+                          AndroidAuthMessages(
+                            cancelButton: 'No thanks',
+                          ),
+                          IOSAuthMessages(
+                            cancelButton: 'No thanks',
+                          ),
+                        ]);
+                    if (didAuthenticate == true) {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => auth_successfull_view(),
+                          ));
                     }
-                  },
-                  child: Text('fingerprint_authentication')),
-            ],
-          ),
+                  }
+                } on PlatformException catch (e) {
+                  if (e.code == error_code.passcodeNotSet) {
+                    exit(0);
+                  }
+                  print("$e");
+                }
+              },
+              child: Text(
+                'fingerprint_Authentication',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              )),
         ),
       ),
     );
